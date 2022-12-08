@@ -14,16 +14,24 @@ void setup() {
 void loop() {
 
   float aX=0, aY=0, aZ=0;
-  read_accelerometer_data(aX, aY, aZ);
-  print_imu_data("Accelerometer", aX, aY, aZ);
+  sensors_read_accelerometer_data(aX, aY, aZ);
+  //print_imu_data("Accelerometer", aX, aY, aZ);
 
   float gX=0, gY=0, gZ=0;
-  read_gyroscope_data(gX, gY, gZ);
-  print_imu_data("Gyroscope", gX, gY, gZ);
+  sensors_read_gyroscope_data(gX, gY, gZ);
+  //print_imu_data("Gyroscope", gX, gY, gZ);
 
   float mX=0, mY=0, mZ=0;
-  read_magnetomer_data(mX, mY, mZ);
-  print_imu_data("Magnetometer", mX, mY, mZ);
+  sensors_read_magnetomer_data(mX, mY, mZ);
+  //print_imu_data("Magnetometer", mX, mY, mZ);
+
+  float temperature = sensors_read_temperature_data();
+  Serial.print("Temperature: ");
+  Serial.println(temperature);
+  
+  float humidity = sensors_read_humidity_data();
+  Serial.print("Humidity: ");
+  Serial.println(humidity);
 }
 
 static void print_imu_data(String sensor, float x, float y, float z) {
