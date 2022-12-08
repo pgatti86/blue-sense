@@ -7,6 +7,8 @@ void setup() {
   Serial.begin(9600);
   while (!Serial);
 
+  digitalWrite(LED_PWR, LOW); // turn off POWER LED
+
   Serial.println("Init board sensors...");
   sensors_init();
 }
@@ -35,7 +37,11 @@ void loop() {
 
   float pressure = sensors_read_pressure_data();
   Serial.print("Pressure = ");
-  Serial.print(pressure);
+  Serial.println(pressure);
+
+  float altitude = sensors_read_derive_altitude();
+  Serial.print("Altitude = ");
+  Serial.println(altitude);
 
   delay(10000);
 }

@@ -84,3 +84,8 @@ float sensors_read_pressure_data() {
   return BARO.readPressure();
 }
 
+float sensors_read_derive_altitude() {
+  float pressure = sensors_read_pressure_data();
+  return 44330 * ( 1 - pow(pressure/101.325, 1/5.255) );
+}
+
