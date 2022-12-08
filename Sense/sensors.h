@@ -15,6 +15,6 @@ float sensors_read_humidity_data();
 
 float sensors_read_pressure_data();
 
-float sensors_read_derive_altitude();
+float sensors_derive_altitude(float pressure);
 
 #endif

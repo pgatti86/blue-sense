@@ -39,7 +39,7 @@ void loop() {
   Serial.print("Pressure = ");
   Serial.println(pressure);
 
-  float altitude = sensors_read_derive_altitude();
+  float altitude = sensors_derive_altitude(pressure);
   Serial.print("Altitude = ");
   Serial.println(altitude);
 
