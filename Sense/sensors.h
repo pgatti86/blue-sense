@@ -13,4 +13,6 @@ float sensors_read_temperature_data();
 
 float sensors_read_humidity_data();
 
+float sensors_read_pressure_data();
+
 #endif

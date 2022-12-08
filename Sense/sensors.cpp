@@ -2,6 +2,7 @@
 
 #include <Arduino_LSM9DS1.h>
 #include <Arduino_HTS221.h>
+#include <Arduino_LPS22HB.h>
 
 static void sensors_init_imu() {
 
@@ -36,7 +37,12 @@ static void sensors_init_environmental() {
     while (1);
   }
 
-   Serial.println("HTS221 initialized");
+  if (!BARO.begin()) {
+    Serial.println("Failed to initialize pressure sensor!");
+    while (1);
+  }
+
+  Serial.println("Environmental sensors initialized");
 }
 
 void sensors_init() {
@@ -72,5 +78,9 @@ float sensors_read_temperature_data() {
 
 float sensors_read_humidity_data() {
   return HTS.readHumidity();
+}
+
+float sensors_read_pressure_data() {
+  return BARO.readPressure();
 }
 
