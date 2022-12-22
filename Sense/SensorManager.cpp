@@ -14,58 +14,57 @@ void SensorManager::initSensors() {
 
 void SensorManager::readAcceleration(float destination[]) {
   if (IMU.accelerationAvailable()) {
-    IMU.readAcceleration(SensorManager::acceleration[0], SensorManager::acceleration[1], SensorManager::acceleration[2]);      
+    IMU.readAcceleration(this->acceleration[0], this->acceleration[1], this->acceleration[2]);      
   }
 
-  memcpy(destination, SensorManager::acceleration, 3*sizeof(float));
+  memcpy(destination, this->acceleration, 3*sizeof(float));
 }
-
 
 void SensorManager::readGyroscope(float destination[]) {
   if (IMU.gyroscopeAvailable()) {
-    IMU.readGyroscope(SensorManager::dps[0], SensorManager::dps[1], SensorManager::dps[2]);
+    IMU.readGyroscope(this->dps[0], this->dps[1], this->dps[2]);
   }
 
-  memcpy(destination, SensorManager::dps, 3*sizeof(float));
+  memcpy(destination, this->dps, 3*sizeof(float));
 }
 
 void SensorManager::readMagneticField(float destination[]) {
   if (IMU.magneticFieldAvailable()) {
-    IMU.readMagneticField(SensorManager::magneticField[0], SensorManager::magneticField[1], SensorManager::magneticField[2]);    
+    IMU.readMagneticField(this->magneticField[0], this->magneticField[1], this->magneticField[2]);    
   }
 
-  memcpy(destination, SensorManager::magneticField, 3*sizeof(float));
+  memcpy(destination, this->magneticField, 3*sizeof(float));
 }
 
 float SensorManager::readTemperature() {
-  if (millis() - SensorManager::lastTemperatureReadMillis > ENVIRONMENTAL_SENSORS_READ_DELAY_MS) {
-    SensorManager::lastTemperatureReadMillis = millis();
-    SensorManager::temperature = HTS.readTemperature();
+  if (millis() - this->lastTemperatureReadMillis > ENVIRONMENTAL_SENSORS_READ_DELAY_MS) {
+    this->lastTemperatureReadMillis = millis();
+    this->temperature = HTS.readTemperature();
   }
   
-  return SensorManager::temperature;
+  return this->temperature;
 }
 
 float SensorManager::readHumidity() {
-  if (millis() - SensorManager::lastHimidityReadMillis > ENVIRONMENTAL_SENSORS_READ_DELAY_MS) {
-    SensorManager::lastHimidityReadMillis = millis();
-    SensorManager::humidity = HTS.readHumidity();
+  if (millis() - this->lastHimidityReadMillis > ENVIRONMENTAL_SENSORS_READ_DELAY_MS) {
+    this->lastHimidityReadMillis = millis();
+    this->humidity = HTS.readHumidity();
   }
   
-  return SensorManager::humidity;
+  return this->humidity;
 }
 
 float SensorManager::readPressure() {
-  if (millis() - SensorManager::lastPressureReadMillis > ENVIRONMENTAL_SENSORS_READ_DELAY_MS) {
-    SensorManager::lastPressureReadMillis = millis();
-    SensorManager::pressure = BARO.readPressure();
+  if (millis() - this->lastPressureReadMillis > ENVIRONMENTAL_SENSORS_READ_DELAY_MS) {
+    this->lastPressureReadMillis = millis();
+    this->pressure = BARO.readPressure();
   }
   
-  return SensorManager::pressure;
+  return this->pressure;
 }
 
 float SensorManager::deriveAltitude() {
-  return 44330 * ( 1.0 - pow(SensorManager::pressure/101.325, 0.1903));
+  return 44330 * ( 1.0 - pow(this->pressure/101.325, 0.1903));
 }
 
 void SensorManager::initImu() {

@@ -24,8 +24,7 @@ class SensorManager {
     float lastHimidityReadMillis;
     float pressure;
     float lastPressureReadMillis;
-
-  private:  
+    
     void initImu();
     void initEnvironmentalSensors();
 };
