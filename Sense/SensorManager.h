@@ -9,21 +9,21 @@ class SensorManager {
     void readGyroscope(float destination[]);
     void readMagneticField(float destination[]);
     float readTemperature();
+    bool canPollTemperatureSensor();
     float readHumidity();
     float readPressure();
     float deriveAltitude();
-
 
   private:
     float acceleration[3];
     float dps[3];
     float magneticField[3];
     float temperature;
-    float lastTemperatureReadMillis;
+    unsigned long lastTemperatureReadMillis;
     float humidity;
-    float lastHimidityReadMillis;
+    unsigned long lastHimidityReadMillis;
     float pressure;
-    float lastPressureReadMillis;
+    unsigned long lastPressureReadMillis;
     
     void initImu();
     void initEnvironmentalSensors();

@@ -4,7 +4,7 @@
 #include <Arduino_HTS221.h>
 #include <Arduino_LPS22HB.h>
 
-const int ENVIRONMENTAL_SENSORS_READ_DELAY_MS = 500;
+const int ENVIRONMENTAL_SENSORS_READ_DELAY_MS = 1000;
 
 void SensorManager::initSensors() {
  
@@ -37,12 +37,16 @@ void SensorManager::readMagneticField(float destination[]) {
 }
 
 float SensorManager::readTemperature() {
-  if (millis() - this->lastTemperatureReadMillis > ENVIRONMENTAL_SENSORS_READ_DELAY_MS) {
+  if (canPollTemperatureSensor()) {
     this->lastTemperatureReadMillis = millis();
     this->temperature = HTS.readTemperature();
   }
   
   return this->temperature;
+}
+
+bool SensorManager::canPollTemperatureSensor() {
+  return millis() - this->lastTemperatureReadMillis > ENVIRONMENTAL_SENSORS_READ_DELAY_MS;
 }
 
 float SensorManager::readHumidity() {
