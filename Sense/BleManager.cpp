@@ -32,7 +32,8 @@ void bleManager_init(int fwVersion, MeasureReadCallBack callback) {
     while (1);
   }
 
-  BLE.setLocalName("BlueSense");
+  String deviceName = "BleSense-" + BLE.address().substring(0,8);
+  BLE.setLocalName(deviceName.c_str());
 
   BLE.setAdvertisedService(service);
 
