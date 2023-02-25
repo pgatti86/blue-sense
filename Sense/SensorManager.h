@@ -11,6 +11,7 @@ class SensorManager {
     float readTemperature();
     bool canPollTemperatureSensor();
     float readHumidity();
+    bool canPollHumiditySensor();
     float readPressure();
     float deriveAltitude();
 
@@ -21,7 +22,7 @@ class SensorManager {
     float temperature;
     unsigned long lastTemperatureReadMillis;
     float humidity;
-    unsigned long lastHimidityReadMillis;
+    unsigned long lastHumidityReadMillis;
     float pressure;
     unsigned long lastPressureReadMillis;
     

@@ -50,12 +50,16 @@ bool SensorManager::canPollTemperatureSensor() {
 }
 
 float SensorManager::readHumidity() {
-  if (millis() - this->lastHimidityReadMillis > ENVIRONMENTAL_SENSORS_READ_DELAY_MS) {
-    this->lastHimidityReadMillis = millis();
+  if (canPollHumiditySensor()) {
+    this->lastHumidityReadMillis = millis();
     this->humidity = HTS.readHumidity();
   }
   
   return this->humidity;
+}
+
+bool SensorManager::canPollHumiditySensor() {
+  return millis() - this->lastHumidityReadMillis > ENVIRONMENTAL_SENSORS_READ_DELAY_MS;
 }
 
 float SensorManager::readPressure() {

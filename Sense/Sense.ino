@@ -55,7 +55,7 @@ void bleTask() {
       writeTemperatureCharacteristic();
     }
 
-    if (bleManager_isSubscribedToHumidityCharacteristic()) {
+    if (bleManager_isSubscribedToHumidityCharacteristic() && sensorManager.canPollHumiditySensor()) {
       writeHumidityCharacteristic();
     }
 
