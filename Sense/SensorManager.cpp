@@ -63,12 +63,16 @@ bool SensorManager::canPollHumiditySensor() {
 }
 
 float SensorManager::readPressure() {
-  if (millis() - this->lastPressureReadMillis > ENVIRONMENTAL_SENSORS_READ_DELAY_MS) {
+  if (canPollPressureSensor()) {
     this->lastPressureReadMillis = millis();
     this->pressure = BARO.readPressure();
   }
   
   return this->pressure;
+}
+
+bool SensorManager::canPollPressureSensor() {
+  return millis() - this->lastPressureReadMillis > ENVIRONMENTAL_SENSORS_READ_DELAY_MS;
 }
 
 float SensorManager::deriveAltitude() {

@@ -59,7 +59,7 @@ void bleTask() {
       writeHumidityCharacteristic();
     }
 
-    if (bleManager_isSubscribedToPressureCharacteristic()) {
+    if (bleManager_isSubscribedToPressureCharacteristic() && sensorManager.canPollPressureSensor()) {
       writePressureCharacteristic();
     }
 

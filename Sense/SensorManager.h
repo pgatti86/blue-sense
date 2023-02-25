@@ -13,6 +13,7 @@ class SensorManager {
     float readHumidity();
     bool canPollHumiditySensor();
     float readPressure();
+    bool canPollPressureSensor();
     float deriveAltitude();
 
   private:
