@@ -76,7 +76,7 @@ bool SensorManager::canPollPressureSensor() {
 }
 
 float SensorManager::deriveAltitude() {
-  return 44330 * ( 1.0 - pow(this->pressure/101.325, 0.1903));
+  return ((pow((101.325 / this->pressure), 0.1903) - 1) * (this->temperature + 273.15)) / 0.0065;
 }
 
 void SensorManager::initImu() {

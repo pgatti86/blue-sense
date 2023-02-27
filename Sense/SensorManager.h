@@ -9,11 +9,8 @@ class SensorManager {
     void readGyroscope(float destination[]);
     void readMagneticField(float destination[]);
     float readTemperature();
-    bool canPollTemperatureSensor();
     float readHumidity();
-    bool canPollHumiditySensor();
     float readPressure();
-    bool canPollPressureSensor();
     float deriveAltitude();
 
   private:
@@ -22,10 +19,13 @@ class SensorManager {
     float magneticField[3];
     float temperature;
     unsigned long lastTemperatureReadMillis;
+    bool canPollTemperatureSensor();
     float humidity;
     unsigned long lastHumidityReadMillis;
+    bool canPollHumiditySensor();
     float pressure;
     unsigned long lastPressureReadMillis;
+    bool canPollPressureSensor();
     
     void initImu();
     void initEnvironmentalSensors();

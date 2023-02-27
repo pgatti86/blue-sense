@@ -32,6 +32,11 @@ void bleTask() {
 
   bool isConnected = bleManager_isConnected();
 
+  static unsigned long lastTemperatureWrite = millis();
+  static unsigned long lastHumidityWrite = millis();
+  static unsigned long lastPressureWrite = millis();
+  static unsigned long lastAltitudeWrite = millis();
+
   digitalWrite(LED_BUILTIN, isConnected ? HIGH : LOW);
 
   if (isConnected) {
@@ -51,19 +56,23 @@ void bleTask() {
       bleManager_writeMagneticFieldData(magneticField);
     }
 
-    if (bleManager_isSubscribedToTemperatureCharacteristic() && sensorManager.canPollTemperatureSensor()) {
+    if (bleManager_isSubscribedToTemperatureCharacteristic() && millis() - lastTemperatureWrite > 1000) {
+      lastTemperatureWrite = millis();
       writeTemperatureCharacteristic();
     }
 
-    if (bleManager_isSubscribedToHumidityCharacteristic() && sensorManager.canPollHumiditySensor()) {
+    if (bleManager_isSubscribedToHumidityCharacteristic() && millis() - lastHumidityWrite > 1000) {
+      lastHumidityWrite = millis();
       writeHumidityCharacteristic();
     }
 
-    if (bleManager_isSubscribedToPressureCharacteristic() && sensorManager.canPollPressureSensor()) {
+    if (bleManager_isSubscribedToPressureCharacteristic() && millis() - lastPressureWrite > 1000) {
+      lastPressureWrite = millis();
       writePressureCharacteristic();
     }
 
-    if (bleManager_isSubscribedToAltutideCharacteristic()) {
+    if (bleManager_isSubscribedToAltutideCharacteristic() && millis() - lastAltitudeWrite > 1000) {
+      lastAltitudeWrite = millis();
       writeAltitudeCharacteristic();
     }
   }
