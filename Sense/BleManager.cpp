@@ -4,22 +4,22 @@
 MeasureReadCallBack measureCallback = NULL;
 
 void onPressureCharacteristicRead(BLEDevice central, BLECharacteristic characteristic) {
- if(measureCallback)
+ if (measureCallback)
     measureCallback(Pressure);
 }
 
 void onTemperatureCharacteristicRead(BLEDevice central, BLECharacteristic characteristic) {
-  if(measureCallback)
+  if (measureCallback)
     measureCallback(Temperature);
 }
 
 void onHumidityCharacteristicRead(BLEDevice central, BLECharacteristic characteristic) {
- if(measureCallback)
+ if (measureCallback)
     measureCallback(Humidity);
 }
 
 void onAltitudeCharacteristicRead(BLEDevice central, BLECharacteristic characteristic) {
-  if(measureCallback)
+  if (measureCallback)
     measureCallback(Altitude);
 }
 
@@ -51,6 +51,7 @@ void bleManager_init(int fwVersion, MeasureReadCallBack callback) {
   humidityCharacteristic.setEventHandler(BLERead, onHumidityCharacteristicRead);
   service.addCharacteristic(altitudeCharacteristic);
   altitudeCharacteristic.setEventHandler(BLERead, onAltitudeCharacteristicRead);
+  service.addCharacteristic(orientationCharacteristic);
 
   BLE.addService(service);
 
@@ -116,4 +117,12 @@ bool bleManager_isSubscribedToAltutideCharacteristic() {
 void bleManager_writeAltitudeData(float data) {
   altitudeCharacteristic.writeValue(data);
 }
+
+bool bleManager_isSubscribedToOrientationCharacteristic() {
+  return orientationCharacteristic.subscribed();
+}
+
+void bleManager_writeOrientationData(float data[], int size) {
+  orientationCharacteristic.writeValue(data, size);
+} 
 

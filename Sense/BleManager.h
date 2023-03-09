@@ -1,7 +1,7 @@
 #ifndef BLE_MANAGER_H
 #define BLE_MANAGER_H
 
-enum MeasureType{Temperature, Humidity, Pressure, Altitude};
+enum MeasureType { Temperature, Humidity, Pressure, Altitude };
 
 typedef void (*MeasureReadCallBack)(MeasureType);
 
@@ -28,5 +28,8 @@ void bleManager_writePressureData(float data);
 
 bool bleManager_isSubscribedToAltutideCharacteristic();
 void bleManager_writeAltitudeData(float data);
+
+bool bleManager_isSubscribedToOrientationCharacteristic();
+void bleManager_writeOrientationData(float data[], int size = 3*sizeof(float));
 
 #endif

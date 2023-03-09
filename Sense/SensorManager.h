@@ -1,6 +1,8 @@
 #ifndef BLE_SENSE_IDENTIFIERS_H
 #define BLE_SENSE_IDENTIFIERS_H
 
+#include <MadgwickAHRS.h>
+
 class SensorManager {
 
   public:
@@ -8,10 +10,15 @@ class SensorManager {
     void readAcceleration(float destination[]);
     void readGyroscope(float destination[]);
     void readMagneticField(float destination[]);
+    bool canPollTemperatureSensor();
     float readTemperature();
+    bool canPollHumiditySensor();
     float readHumidity();
+    bool canPollPressureSensor();
     float readPressure();
     float deriveAltitude();
+    bool canPollOrientation();
+    void readOrientation(float destination[]);
 
   private:
     float acceleration[3];
@@ -19,14 +26,13 @@ class SensorManager {
     float magneticField[3];
     float temperature;
     unsigned long lastTemperatureReadMillis;
-    bool canPollTemperatureSensor();
     float humidity;
     unsigned long lastHumidityReadMillis;
-    bool canPollHumiditySensor();
     float pressure;
     unsigned long lastPressureReadMillis;
-    bool canPollPressureSensor();
-    
+    Madgwick madgwickFilter;
+    float orientation[3];
+    unsigned long lastOrientationReadMicros;
     void initImu();
     void initEnvironmentalSensors();
 };

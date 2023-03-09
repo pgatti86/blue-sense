@@ -7,6 +7,7 @@ const int FW_VERSION = 1;
 float acceleration[3];
 float dps[3];
 float magneticField[3];
+float orientation[3];
 
 SensorManager sensorManager;
 
@@ -25,17 +26,12 @@ void setup() {
 }
 
 void loop() {
-  delay(500);
+  delay(1000);
 }
 
 void bleTask() {
 
   bool isConnected = bleManager_isConnected();
-
-  static unsigned long lastTemperatureWrite = millis();
-  static unsigned long lastHumidityWrite = millis();
-  static unsigned long lastPressureWrite = millis();
-  static unsigned long lastAltitudeWrite = millis();
 
   digitalWrite(LED_BUILTIN, isConnected ? HIGH : LOW);
 
@@ -56,24 +52,27 @@ void bleTask() {
       bleManager_writeMagneticFieldData(magneticField);
     }
 
-    if (bleManager_isSubscribedToTemperatureCharacteristic() && millis() - lastTemperatureWrite > 1000) {
-      lastTemperatureWrite = millis();
+    if (bleManager_isSubscribedToTemperatureCharacteristic() && sensorManager.canPollTemperatureSensor()) {
       writeTemperatureCharacteristic();
     }
 
-    if (bleManager_isSubscribedToHumidityCharacteristic() && millis() - lastHumidityWrite > 1000) {
-      lastHumidityWrite = millis();
+    if (bleManager_isSubscribedToHumidityCharacteristic() && sensorManager.canPollHumiditySensor()) {
       writeHumidityCharacteristic();
     }
 
-    if (bleManager_isSubscribedToPressureCharacteristic() && millis() - lastPressureWrite > 1000) {
-      lastPressureWrite = millis();
-      writePressureCharacteristic();
+    if (sensorManager.canPollPressureSensor()) {
+      if (bleManager_isSubscribedToPressureCharacteristic()) {
+        writePressureCharacteristic();
+      }
+
+      if (bleManager_isSubscribedToAltutideCharacteristic()) {
+        writeAltitudeCharacteristic();
+      }
     }
 
-    if (bleManager_isSubscribedToAltutideCharacteristic() && millis() - lastAltitudeWrite > 1000) {
-      lastAltitudeWrite = millis();
-      writeAltitudeCharacteristic();
+    if (bleManager_isSubscribedToOrientationCharacteristic() && sensorManager.canPollOrientation()) {
+      sensorManager.readOrientation(orientation);
+      bleManager_writeOrientationData(orientation);
     }
   }
 

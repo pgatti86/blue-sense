@@ -6,10 +6,17 @@
 
 const int ENVIRONMENTAL_SENSORS_READ_DELAY_MS = 1000;
 
+const int LSM_IMU_HZ = 119;
+
+const unsigned long ORIENTATION_READ_DELAY_US = 1000000 / LSM_IMU_HZ;
+
 void SensorManager::initSensors() {
  
   initImu();
   initEnvironmentalSensors();
+
+  madgwickFilter.begin(LSM_IMU_HZ);
+  lastOrientationReadMicros = micros();
 }
 
 void SensorManager::readAcceleration(float destination[]) {
@@ -17,7 +24,9 @@ void SensorManager::readAcceleration(float destination[]) {
     IMU.readAcceleration(this->acceleration[0], this->acceleration[1], this->acceleration[2]);      
   }
 
-  memcpy(destination, this->acceleration, 3*sizeof(float));
+  if (destination != NULL) {
+    memcpy(destination, this->acceleration, 3*sizeof(float));
+  }
 }
 
 void SensorManager::readGyroscope(float destination[]) {
@@ -25,7 +34,9 @@ void SensorManager::readGyroscope(float destination[]) {
     IMU.readGyroscope(this->dps[0], this->dps[1], this->dps[2]);
   }
 
-  memcpy(destination, this->dps, 3*sizeof(float));
+  if (destination != NULL) {
+    memcpy(destination, this->dps, 3*sizeof(float));
+  }
 }
 
 void SensorManager::readMagneticField(float destination[]) {
@@ -33,7 +44,9 @@ void SensorManager::readMagneticField(float destination[]) {
     IMU.readMagneticField(this->magneticField[0], this->magneticField[1], this->magneticField[2]);    
   }
 
-  memcpy(destination, this->magneticField, 3*sizeof(float));
+  if (destination != NULL) {
+    memcpy(destination, this->magneticField, 3*sizeof(float));
+  }
 }
 
 float SensorManager::readTemperature() {
@@ -77,6 +90,32 @@ bool SensorManager::canPollPressureSensor() {
 
 float SensorManager::deriveAltitude() {
   return ((pow((101.325 / this->pressure), 0.1903) - 1) * (this->temperature + 273.15)) / 0.0065;
+}
+
+void SensorManager::readOrientation(float destination[]) {
+  if (canPollOrientation()) {
+
+    readAcceleration(NULL);
+    readGyroscope(NULL);
+    readMagneticField(NULL);
+
+    madgwickFilter.update(
+      dps[0], dps[1], dps[2],
+      acceleration[0], acceleration[1], acceleration[2],
+      magneticField[0], magneticField[1], magneticField[2]
+    );
+
+    orientation[0] = madgwickFilter.getYawRadians();
+    orientation[1] = madgwickFilter.getPitchRadians();
+    orientation[2] = madgwickFilter.getRollRadians();
+
+    memcpy(destination, this->orientation, 3*sizeof(float));
+    lastOrientationReadMicros += ORIENTATION_READ_DELAY_US;
+  }
+}
+
+bool SensorManager::canPollOrientation() {
+  return micros() - lastOrientationReadMicros >= ORIENTATION_READ_DELAY_US;
 }
 
 void SensorManager::initImu() {
