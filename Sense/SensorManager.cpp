@@ -6,16 +6,16 @@
 
 const int ENVIRONMENTAL_SENSORS_READ_DELAY_MS = 1000;
 
-const int LSM_IMU_HZ = 119;
+const int IMU_DEFAULT_SAMPLE_RATE_HZ = 119;
 
-const unsigned long ORIENTATION_READ_DELAY_US = 1000000 / LSM_IMU_HZ;
+const unsigned long IMU_READ_DELAY_US = 1000000 / IMU_DEFAULT_SAMPLE_RATE_HZ;
 
 void SensorManager::initSensors() {
  
   initImu();
   initEnvironmentalSensors();
 
-  madgwickFilter.begin(LSM_IMU_HZ);
+  madgwickFilter.begin(IMU_DEFAULT_SAMPLE_RATE_HZ);
   lastOrientationReadMicros = micros();
 }
 
@@ -92,6 +92,15 @@ float SensorManager::deriveAltitude() {
   return ((pow((101.325 / this->pressure), 0.1903) - 1) * (this->temperature + 273.15)) / 0.0065;
 }
 
+float SensorManager::computeHeading() {
+  float degrees = (atan2(this->magneticField[1], this->magneticField[0]) * 180) / PI;
+  if (degrees < 0) {
+    degrees += 360;
+  }
+  this->heading = degrees;
+  return this->heading;
+}
+
 void SensorManager::readOrientation(float destination[]) {
   if (canPollOrientation()) {
 
@@ -110,12 +119,12 @@ void SensorManager::readOrientation(float destination[]) {
     orientation[2] = madgwickFilter.getRollRadians();
 
     memcpy(destination, this->orientation, 3*sizeof(float));
-    lastOrientationReadMicros += ORIENTATION_READ_DELAY_US;
+    lastOrientationReadMicros += IMU_READ_DELAY_US;
   }
 }
 
 bool SensorManager::canPollOrientation() {
-  return micros() - lastOrientationReadMicros >= ORIENTATION_READ_DELAY_US;
+  return micros() - lastOrientationReadMicros >= IMU_READ_DELAY_US;
 }
 
 void SensorManager::initImu() {

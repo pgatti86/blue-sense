@@ -52,6 +52,11 @@ void bleTask() {
       bleManager_writeMagneticFieldData(magneticField);
     }
 
+    if (bleManager_isSubscribedToHeadingCharacteristic()) {
+      sensorManager.readMagneticField(magneticField);
+      bleManager_writeHeadingData(sensorManager.computeHeading());
+    }
+
     if (bleManager_isSubscribedToTemperatureCharacteristic() && sensorManager.canPollTemperatureSensor()) {
       writeTemperatureCharacteristic();
     }

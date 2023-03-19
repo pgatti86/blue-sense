@@ -51,6 +51,7 @@ void bleManager_init(int fwVersion, MeasureReadCallBack callback) {
   humidityCharacteristic.setEventHandler(BLERead, onHumidityCharacteristicRead);
   service.addCharacteristic(altitudeCharacteristic);
   altitudeCharacteristic.setEventHandler(BLERead, onAltitudeCharacteristicRead);
+  service.addCharacteristic(headingCharacteristic);
   service.addCharacteristic(orientationCharacteristic);
 
   BLE.addService(service);
@@ -124,5 +125,14 @@ bool bleManager_isSubscribedToOrientationCharacteristic() {
 
 void bleManager_writeOrientationData(float data[], int size) {
   orientationCharacteristic.writeValue(data, size);
-} 
+}
+
+bool bleManager_isSubscribedToHeadingCharacteristic() {
+  return headingCharacteristic.subscribed();
+}
+
+void bleManager_writeHeadingData(float data) {
+  headingCharacteristic.writeValue(data);
+}
+
 

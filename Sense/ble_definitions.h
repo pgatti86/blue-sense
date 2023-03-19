@@ -11,7 +11,8 @@ BLEUnsignedIntCharacteristic   versionCharacteristic         (BLE_UUID("1001"), 
 BLECharacteristic              accelerationCharacteristic    (BLE_UUID("2001"), BLENotify, 3 * sizeof(float)); // Array of 3 floats, G
 BLECharacteristic              gyroscopeCharacteristic       (BLE_UUID("2002"), BLENotify, 3 * sizeof(float)); // Array of 3 floats, dps
 BLECharacteristic              magneticFieldCharacteristic   (BLE_UUID("2003"), BLENotify, 3 * sizeof(float)); // Array of 3 floats, uT
-BLECharacteristic              orientationCharacteristic     (BLE_UUID("2004"), BLENotify, 3 * sizeof(float)); // Array of 3 floats, rad
+BLEFloatCharacteristic         headingCharacteristic         (BLE_UUID("2004"), BLENotify); // Float, degrees
+BLECharacteristic              orientationCharacteristic     (BLE_UUID("2005"), BLENotify, 3 * sizeof(float)); // Array of 3 floats, rad
 
 BLEFloatCharacteristic         pressureCharacteristic        (BLE_UUID("3001"), BLERead | BLENotify); // Float, kPa
 BLEFloatCharacteristic         temperatureCharacteristic     (BLE_UUID("3002"), BLERead | BLENotify); // Float, Celcius

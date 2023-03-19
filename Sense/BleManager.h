@@ -32,4 +32,7 @@ void bleManager_writeAltitudeData(float data);
 bool bleManager_isSubscribedToOrientationCharacteristic();
 void bleManager_writeOrientationData(float data[], int size = 3*sizeof(float));
 
+bool bleManager_isSubscribedToHeadingCharacteristic();
+void bleManager_writeHeadingData(float data);
+
 #endif

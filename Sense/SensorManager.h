@@ -17,6 +17,7 @@ class SensorManager {
     bool canPollPressureSensor();
     float readPressure();
     float deriveAltitude();
+    float computeHeading();
     bool canPollOrientation();
     void readOrientation(float destination[]);
 
@@ -30,6 +31,7 @@ class SensorManager {
     unsigned long lastHumidityReadMillis;
     float pressure;
     unsigned long lastPressureReadMillis;
+    float heading;
     Madgwick madgwickFilter;
     float orientation[3];
     unsigned long lastOrientationReadMicros;
